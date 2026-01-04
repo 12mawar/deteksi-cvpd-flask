@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Statistik Deteksi{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- JUDUL -->
+    <div class="row mb-4">
+        <div class="col">
+            <h3 class="fw-bold text-primary">
+                📊 Statistik Deteksi Penyakit CVPD
+            </h3>
+            <p class="text-muted">
+                Ringkasan dan riwayat deteksi berdasarkan akun Anda
+            </p>
+        </div>
+    </div>
+
+    <!-- KARTU STATISTIK -->
+    <div class="row text-center mb-4">
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success text-white shadow rounded-4 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🌿 Daun Sehat</h5>
+                    <p class="display-6 fw-bold">{{ total_sehat }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-danger text-white shadow rounded-4 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🦠 Terinfeksi CVPD</h5>
+                    <p class="display-6 fw-bold">{{ total_terinfeksi }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-info text-white shadow rounded-4 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">📈 Total Deteksi</h5>
+                    <p class="display-6 fw-bold">{{ total_deteksi }}</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIWAYAT -->
+    <div class="card shadow rounded-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0 fw-bold">📂 Riwayat Deteksi</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle text-center">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Citra Asli</th>
+                            <th>Segmentasi</th>
+                            <th>Prediksi</th>
+                            <th>Confidence</th>
+                            <th>Waktu</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% if hasil %}
+                            {% for row in hasil %}
+                            <tr>
+                                <td>
+                                    <img src="{{ url_for('gambar', id=row['id'], jenis='original') }}"
+                                         class="img-thumbnail"
+                                         width="90">
+                                </td>
+
+                                <td>
+                                    <img src="{{ url_for('gambar', id=row['id'], jenis='segmented') }}"
+                                         class="img-thumbnail"
+                                         width="90">
+                                </td>
+
+                                <td>
+                                    <span class="badge
+                                        {% if row['prediksi'] == 'Sehat' %}
+                                            bg-success
+                                        {% else %}
+                                            bg-danger
+                                        {% endif %}
+                                    ">
+                                        {{ row['prediksi'] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    {{ row['confidence'] | round(2) }}%
+                                </td>
+
+                                <td>
+                                    {{ row['waktu'] }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-muted">
+                                    Belum ada riwayat deteksi
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
