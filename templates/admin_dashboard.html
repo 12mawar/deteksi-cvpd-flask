@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col text-center">
+            <h2 class="fw-bold">
+                Dashboard Administrator
+            </h2>
+            <p class="text-muted">
+                Sistem Deteksi Penyakit CVPD pada Daun Jeruk
+            </p>
+
+            {% if session.get('user') %}
+            <p class="text-info">
+                Login sebagai <strong>Admin ({{ session['user'] }})</strong>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- STATISTIK -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow rounded-4 h-100 text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Total User</h6>
+                    <h2 class="fw-bold">{{ total_user }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow rounded-4 h-100 text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Deteksi</h6>
+                    <h2 class="fw-bold">{{ total_deteksi }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow rounded-4 h-100 text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Sehat</h6>
+                    <h2 class="fw-bold text-success">{{ total_sehat }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow rounded-4 h-100 text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Terinfeksi CVPD</h6>
+                    <h2 class="fw-bold text-danger">{{ total_terinfeksi }}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TABEL RIWAYAT -->
+    <div class="card shadow rounded-4">
+        <div class="card-body">
+            <h5 class="mb-3 fw-bold">Riwayat Deteksi Seluruh User</h5>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>No</th>
+                            <th>Username</th>
+                            <th>Prediksi</th>
+                            <th>Confidence</th>
+                            <th>Waktu</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in data %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ row.username }}</td>
+                            <td>
+                                {% if row.prediksi == 'Sehat' %}
+                                    <span class="badge bg-success">Sehat</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Terinfeksi</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ row.confidence }}%</td>
+                            <td>{{ row.waktu }}</td>
+                            <td>
+                                <a href="{{ url_for('hasil', id=row.id) }}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Detail
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
