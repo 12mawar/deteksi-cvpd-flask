@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Hasil Deteksi{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="text-center text-success mb-3">Hasil Deteksi</h3>
+
+  <div class="row">
+    <div class="col-md-6 text-center">
+      <h5>Gambar Asli</h5>
+      <img
+        src="{{ url_for('gambar', id=id, jenis='original') }}"
+        class="img-fluid rounded shadow"
+      >
+    </div>
+
+    <div class="col-md-6 text-center">
+      <h5>Hasil Segmentasi</h5>
+      <img
+        src="{{ url_for('gambar', id=id, jenis='segmented') }}"
+        class="img-fluid rounded shadow"
+      >
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <span class="badge {% if label == 'Sehat' %}bg-success{% else %}bg-danger{% endif %}">
+      {{ label }}
+    </span>
+    <p class="mt-2">Confidence: {{ confidence }}%</p>
+  </div>
+
+  <div class="d-grid gap-2 mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+      ⬅ Kembali ke Dashboard
+    </a>
+
+    <a href="{{ url_for('statistik') }}" class="btn btn-outline-primary">
+      📊 Lihat Statistik
+    </a>
+
+    <a href="{{ url_for('deteksi') }}" class="btn btn-success">
+      🔁 Deteksi Lagi
+    </a>
+  </div>
+</div>
+{% endblock %}
